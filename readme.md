@@ -1,27 +1,40 @@
 # 95-702 Distributed Systems for Information Systems Management
 # Lab 3 - Creating Containers and Deploying to the Cloud
 
+
+___Docker___ is a technology for creating containerized applications - that is, your application runs inside a portable container that has all the elements needed to run that application. "Container" means a __process__ (running program) that executes on a machine. "Portable" means the container can be executed on your laptop or moved to another machine - like a cloud server. The container is isolated from other processes on the host machine, so if it crashes, it shouldn't take any other processes down. There are a few issues with isolation, though - for example, the ports that a regular process can access via sockets must be mapped from the container's internal (virtual) ports to the host's actual ports. Systems can be composed of multiple containers that typically use some other technology (like [Kubernetes](https://kubernetes.io/)) to talk to each other (instead of low level port access). See Docker's [documentation](https://docs.docker.com/) for more details. At the end of the lab, there's a reading assignment about Docker.
+
+A Docker __image__ is an executable file created from a Dockerfile containing all the Docker commands needed to make the image plus a self-contained application. For example, a Web servlet must be packaged as a [war](https://en.wikipedia.org/wiki/WAR_(file_format)#:~:text=In%20software%20engineering%2C%20a%20WAR,that%20together%20constitute%20a%20web) file for use here. When the image is created, it will have an auto-generated name (like "admiring_tereshkova") - you can rename it if you'd like - and the image will have a separate UUID (unique identifier) and image name different than the auto-generated name.
+
+The Docker commands used in the lab are all preceded by "docker"; they are case-sensitive; and when you create the Dockerfile, it ___must___ be in Linux-style format: no ".txt" on the end, and Unix line endings (see below for details).
+
+This lab will get you to install Docker on your laptop, run Interesting Picture as a Docker image, then push that image to the cloud (we'll be using Heroku). As you work through the commands, be sure to reflect on them by asking yourself these questions: What is each command's purpose? What software is being used by this command? How does this fit into a Distributed Systems context?
+
+### Warning! If you are running Windows Home Edition, upgrade to Educational or Pro before doing this lab!
+
 ## Part 1: Running a Docker Image Locally
 
 ### 1.1 Install Docker
 
-1. Go to 
+This part of the lab installs the Docker daemon on your laptop so that you can run Docker containers there.
+
+1. Go to
 
 https://docs.docker.com/install/  
 
 and Install Docker CE (Community Edition) according to your system.  Scroll down to find links for Mac and Windows downloads.
 
-2. After installation, make sure you have the Docker daemon running background.
+2. After installation, make sure you have the Docker daemon running in the background. Open a CMD window (Windows) or terminal (Mac or Linux).
 Use the command docker ps to check if it is running.  You should see table headers with empty rows:
 
         CONTAINER ID    IMAGE   COMMAND CREATED STATUS  PORTS   NAMES
 
 
-3. Run the Hello World test image to see if you docker runs correctly:
+3. Run the Hello World test image to see if you Docker runs correctly:
 
         docker run hello-world
 
-4. If you see the following message, that means you have installed docker correctly.
+4. If you see the following message, that means you have installed Docker correctly.
 
 
         Hello from Docker!
@@ -82,7 +95,7 @@ The ubuntu command they suggest trying runs a container with a command shell.
 
     docker/
     ├── Dockerfile
-    └── ROOT.war 
+    └── ROOT.war
 
 - from the docker directory in a terminal or CMD window, build the docker image with the command (note the space and period at the end); this will take a few seconds, and you'll see docker output scrolling by.
 
@@ -106,11 +119,17 @@ It will display something like this (details will vary):
 
         http://localhost:8080/
 
-- you should see your app running. Test it to make sure it works correctly (again, use the port number from the run command if 8080 didn’t work for you) 
+- you should see your app running. Test it to make sure it works correctly (again, use the port number from the run command if 8080 didn’t work for you)
 
 ### :checkered_flag: **Checkpoint:** This is the Checkpoint for Lab 3.
 
 ## Part 2: Running on the Cloud
+
+Recall that the ___cloud___ is a fancy term for "someone else's servers". Some useful properties of cloud computing include not having to buy hardware, not needing to keep system software (like operating systems) up-to-date, not worrying about exactly where your application is running (although you should think about some possible downsides of that - for example, how is security handled in the cloud?), the ability to scale, up or down, the number of servers in use based on current demand, and geographic placement to put servers closer to clients.
+
+In this lab, you'll use [Heroku](https://www.heroku.com/), which has a free tier for small-scale use. Other commercial cloud providers include [Amazon AWS](https://aws.amazon.com/), [Alibaba Cloud](https://us.alibabacloud.com/en), and [Microsoft Azure](https://azure.microsoft.com/en-us/).
+
+As with Docker, the Heroku commands start with "heroku, sometimes have flags (starting with a single or double -), and use generated names for your application. The process is to create a Heroku app, push your Web servlet to it, release it, then open it (run it). Make sure you follow the directions carefully - in particular, make sure your .sh file is correct. The push may be slow, so be patient - and this is another reason to be careful: you don't want to repeat the commands.
 
 ### 2.1 Get started with the Heroku cloud provider
 1. Create a Heroku account: Go to https://signup.heroku.com/login and register
@@ -126,7 +145,7 @@ an account. You may choose your role as Student.
 
         heroku login
 
-5. Press enter and it will prompt and navigate you to the browser. Then click log in. Your computer should have access to Heroku services, including a dashboard (although the steps below use the cli).
+5. Press enter and it will prompt and navigate you to the browser. Then click log in. Your computer should have access to Heroku services, including a dashboard (although the steps below use the Command-Line Interface).
 
 ### 2.2 Creating and Pushing a Container
 
@@ -142,14 +161,16 @@ Before the last line (which says CMD ["catalina.sh", "run"] ), un-comment the fo
 
 ***Change # 2:***
 
-Comment out the last line so that it looks like this (deleting it is okay, too):
+Comment out the last line so that it looks like this:
 
         #CMD ["catalina.sh", "run"]
 
-2. Create this bash shell script, a text file named “tomcat_starter.sh”; again,
-in Windows, follow the directions above about line endings; this is a text file,
-but with the .sh extension, *NOT* .txt or .sh.txt. Note: the first line is ***required*** to begin
-with a hashtag; it's not a comment.
+2. Create this bash shell script, a text file named “tomcat_starter.sh”.
+
+___Again, in Windows, follow the directions above about line endings; this is a text file,
+but with the .sh extension, *NOT* .txt or .sh.txt.___
+
+Note: the first line is ***required*** to begin with a hashtag; it's not a comment.
 
         #!/bin/bash
         # Change the configuration of Tomcat so that it listens to
@@ -207,5 +228,3 @@ You must be on campus, or using the campus VPN, to view this article.
   a) InterestingPicture running in local Docker - checkpoint
 
   b) InterestingPicture running on Heroku – the rest
-
-
