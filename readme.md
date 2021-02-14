@@ -25,7 +25,11 @@ https://docs.docker.com/install/
 and Install Docker CE (Community Edition) according to your system.  Scroll down to find links for Mac and Windows downloads.
 
 2. After installation, make sure you have the Docker daemon running in the background. Open a CMD window (Windows) or terminal (Mac or Linux).
-Use the command docker ps to check if it is running.  You should see table headers with empty rows:
+Use the command
+
+        docker ps
+
+to check if it is running.  You should see table headers with empty rows:
 
         CONTAINER ID    IMAGE   COMMAND CREATED STATUS  PORTS   NAMES
 
@@ -59,7 +63,7 @@ Use the command docker ps to check if it is running.  You should see table heade
         For more examples and ideas, visit:
          https://docs.docker.com/get-started/
 
-The ubuntu command they suggest trying runs a container with a command shell.
+The command they suggest trying runs a container with an Ubuntu (linux) command shell; there's no need to run it.
 
 ### 1.2 Creating a Custom Docker Container
 
@@ -83,15 +87,15 @@ The ubuntu command they suggest trying runs a container with a command shell.
   from github. Save it to your docker directory. This file contains Docker commands to create a docker container with openjdk12 and Tomcat. It then removes the default web app and copies your war file to the tomcat/webapps directory. Directions:
 
 - save this file – but if you’re using Windows, do these two things:
-- make sure the file uses UNIX/Linux line endings. In Notepad++, use Edit > EOL Conversion > UNIX Format.
-- ***make sure the file does NOT have a .txt extension*** if you're
+-- make sure the file uses UNIX/Linux line endings. In Notepad++, use Edit > EOL Conversion > UNIX Format.
+-- ***make sure the file does NOT have a .txt extension*** if you're
   using Windows. For example, in Notepad++, choose Save As, type the name in
   quotes as "Dockerfile", change the File Type from Text Documents (\*.txt) to
   All Files (\*.\*), and click Save.
 
 ### 1.3. Test your Docker image locally:
 
--In the folder docker, you should have the following structure:
+-In the folder **docker**, you should have the following structure:
 
     docker/
     ├── Dockerfile
@@ -101,7 +105,7 @@ The ubuntu command they suggest trying runs a container with a command shell.
 
         docker build -t interesting_picture .
 
-- you should see all the images by running:
+- you can see all of your images by running:
 
         docker images
 
@@ -110,8 +114,8 @@ It will display something like this (details will vary):
         REPOSITORY            TAG       IMAGE ID        CREATED          SIZE
         interesting_picture   latest    861ece9f7deb    2 minutes ago    108MB
 
-- deploy the image in a container locally. The -p flag maps the actual port on
-  your machine to the Docker container's port. If 8080 is in use, change the first number to something else (say, 9000) and use that number in the browser instead.
+- deploy the image in a container locally. The -p flag (for "publish") maps the actual port on
+  your machine to the Docker container's port. If 8080 is in use on your laptop, change the first number to something else (say, 9000) and use that number in the browser instead.
 
         docker run --rm -it -p 8080:8080 interesting_picture
 
@@ -125,11 +129,11 @@ It will display something like this (details will vary):
 
 ## Part 2: Running on the Cloud
 
-Recall that the ___cloud___ is a fancy term for "someone else's servers". Some useful properties of cloud computing include not having to buy hardware, not needing to keep system software (like operating systems) up-to-date, not worrying about exactly where your application is running (although you should think about some possible downsides of that - for example, how is security handled in the cloud?), the ability to scale, up or down, the number of servers in use based on current demand, and geographic placement to put servers closer to clients.
+Recall that the ___cloud___ is a fancy term for "someone else's servers". Some useful properties of cloud computing include not having to buy hardware, not needing to keep system software (like operating systems) up-to-date, not worrying about exactly where your application is running (although you should think about some possible downsides of that - for example, how is security handled in the cloud?), the ability to scale  - up or down - the number of servers in use based on current demand, and geographic placement to put servers closer to clients.
 
 In this lab, you'll use [Heroku](https://www.heroku.com/), which has a free tier for small-scale use. Other commercial cloud providers include [Amazon AWS](https://aws.amazon.com/), [Alibaba Cloud](https://us.alibabacloud.com/en), and [Microsoft Azure](https://azure.microsoft.com/en-us/).
 
-As with Docker, the Heroku commands start with "heroku, sometimes have flags (starting with a single or double -), and use generated names for your application. The process is to create a Heroku app, push your Web servlet to it, release it, then open it (run it). Make sure you follow the directions carefully - in particular, make sure your .sh file is correct. The push may be slow, so be patient - and this is another reason to be careful: you don't want to repeat the commands.
+As with Docker, the Heroku commands start with "heroku", sometimes have flags (starting with a single or double -), and use generated names for your application. The process is to *create* a Heroku app, *push* your Web servlet to it, *release* it, then *open* it (run it). Make sure you follow the directions carefully - in particular, make sure your .sh file is correct. The push may be slow, so be patient - and this is another reason to be careful: you don't want to repeat the commands.
 
 ### 2.1 Get started with the Heroku cloud provider
 1. Create a Heroku account: Go to https://signup.heroku.com/login and register
@@ -150,18 +154,18 @@ an account. You may choose your role as Student.
 ### 2.2 Creating and Pushing a Container
 
 1. In a new directory named "heroku" (just to keep it separate from the local Dockerfile
-above in the docker directory), copy the Dockerfile from part 1and make the following two changes – see the note above about Windows files: this needs to be a text file without the .txt extension, and it must use UNIX/Linux line endings.
+above in the docker directory), copy the Dockerfile from part 1 and make the following two changes – see the note above about Windows files: this needs to be a text file without the .txt extension, and it must use UNIX/Linux line endings.
 
 ***Change # 1:***
 
-Before the last line (which says CMD ["catalina.sh", "run"] ), un-comment the following lines (remove the hashtags):
+Before the last line (which says CMD ["catalina.sh", "run"] ), un-comment the following lines (i.e. remove the hashtags):
 
         ADD tomcat_starter.sh /home/
         CMD chmod +x /home/tomcat_starter.sh; /home/tomcat_starter.sh
 
 ***Change # 2:***
 
-Comment out the last line so that it looks like this:
+Comment out the last line with a hashtag so that it looks like this:
 
         #CMD ["catalina.sh", "run"]
 
