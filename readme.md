@@ -80,11 +80,11 @@ The command they suggest trying runs a container with an Ubuntu (linux) command 
 - right click on it to bring up its Properties, where you can see its directory
   path (or choose Reveal in Finder on a Mac).
 - you should see the war file in the Project tab under out -> artifacts -> InterestingPicture_war, named InterestingPicture_war.war
-- copy the war file to your docker directory, but re-name it ROOT.war
+- copy the war file to your docker directory, but re-name it __ROOT.war__
 
-2. Creating a custom docker container using Dockerfile
+2. Creating a custom Docker container using Dockerfile
 - in the docker directory, copy the file named "Dockerfile" (note: capitalized)
-  from github. Save it to your docker directory. This file contains Docker commands to create a docker container with openjdk12 and Tomcat. It then removes the default web app and copies your war file to the tomcat/webapps directory. Directions:
+  from github. Save it to your docker directory. This file contains Docker commands to create a docker container with openjdk12 and Tomcat. It then removes the default web app and copies your war file to the tomcat/webapps directory.
 
 - save this file – but if you’re using Windows, do these two things:
 -- make sure the file uses UNIX/Linux line endings. In Notepad++, use Edit > EOL Conversion > UNIX Format.
@@ -95,7 +95,7 @@ The command they suggest trying runs a container with an Ubuntu (linux) command 
 
 ### 1.3. Test your Docker image locally:
 
--In the folder **docker**, you should have the following structure:
+-In the **docker** folder, you should have the following structure:
 
     docker/
     ├── Dockerfile
@@ -123,7 +123,7 @@ It will display something like this (details will vary):
 
         http://localhost:8080/
 
-- you should see your app running. Test it to make sure it works correctly (again, use the port number from the run command if 8080 didn’t work for you)
+- you should see your app running. Test it to make sure it works correctly (again, use the port number from the run command if 8080 didn’t work for you). After showing the running app to your TA, kill the program in the CMD or terminal window with ctrl-C.
 
 ### :checkered_flag: **Checkpoint:** This is the Checkpoint for Lab 3.
 
@@ -133,7 +133,7 @@ Recall that the ___cloud___ is a fancy term for "someone else's servers". Some u
 
 In this lab, you'll use [Heroku](https://www.heroku.com/), which has a free tier for small-scale use. Other commercial cloud providers include [Amazon AWS](https://aws.amazon.com/), [Alibaba Cloud](https://us.alibabacloud.com/en), and [Microsoft Azure](https://azure.microsoft.com/en-us/).
 
-As with Docker, the Heroku commands start with "heroku", sometimes have flags (starting with a single or double -), and use generated names for your application. The process is to *create* a Heroku app, *push* your Web servlet to it, *release* it, then *open* it (run it). Make sure you follow the directions carefully - in particular, make sure your .sh file is correct. The push may be slow, so be patient - and this is another reason to be careful: you don't want to repeat the commands.
+As with Docker, the Heroku commands start with "heroku", sometimes have flags (starting with a single or double -), are case-sensitive, and use generated names for your application. The process is to **create** a Heroku app, **push** your Web servlet to it, **release** it, then **open** it (run it). Make sure you follow the directions carefully - in particular, make sure your .sh file is correct. The push may be slow, so be patient - and this is another reason to be careful: you don't want to repeat the commands.
 
 ### 2.1 Get started with the Heroku cloud provider
 1. Create a Heroku account: Go to https://signup.heroku.com/login and register
@@ -153,7 +153,7 @@ an account. You may choose your role as Student.
 
 ### 2.2 Creating and Pushing a Container
 
-1. In a new directory named "heroku" (just to keep it separate from the local Dockerfile
+1. Create a new directory named "heroku" (just to keep it separate from the local Dockerfile
 above in the docker directory), copy the Dockerfile from part 1 and make the following two changes – see the note above about Windows files: this needs to be a text file without the .txt extension, and it must use UNIX/Linux line endings.
 
 ***Change # 1:***
@@ -228,7 +228,8 @@ You must be on campus, or using the campus VPN, to view this article.
  ii) What property makes Docker containers suitable for version control?
 
 
-### :checkered_flag: **LAB CREDIT:  To get full lab credit, show a TA:
-  a) InterestingPicture running in local Docker - checkpoint
+### :checkered_flag: **LAB CREDIT:  To get full lab credit, show a TA:**
 
-  b) InterestingPicture running on Heroku – the rest
+  ***a) InterestingPicture running in local Docker - checkpoint***
+
+  ***b) InterestingPicture running on Heroku – the rest***
