@@ -125,8 +125,6 @@ It will display something like this (details will vary):
 
 - you should see your app running. Test it to make sure it works correctly (again, use the port number from the run command if 8080 didn’t work for you). After showing the running app to your TA, kill the program in the CMD or terminal window with ctrl-C.
 
-### :checkered_flag: **Checkpoint:** This is the Checkpoint for Lab 3.
-
 ## Part 2: Running on the Cloud
 
 Recall that the ___cloud___ is a fancy term for "someone else's servers". Some useful properties of cloud computing include not having to buy hardware, not needing to keep system software (like operating systems) up-to-date, not worrying about exactly where your application is running (although you should think about some possible downsides of that - for example, how is security handled in the cloud?), the ability to scale  - up or down - the number of servers in use based on current demand, and geographic placement to put servers closer to clients.
@@ -226,10 +224,3 @@ You must be on campus, or using the campus VPN, to view this article.
  i) Is a service like AWS an example of IaaS, Paas, or SaaS?
 
  ii) What property makes Docker containers suitable for version control?
-
-
-### :checkered_flag: **LAB CREDIT:  To get full lab credit, show a TA:**
-
-  ***a) InterestingPicture running in local Docker - checkpoint***
-
-  ***b) InterestingPicture running on Heroku – the rest***
