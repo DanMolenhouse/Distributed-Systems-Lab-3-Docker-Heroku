@@ -200,6 +200,13 @@ but yours will differ: heroku assigns this name to your app; copy it carefully.
 
 The InterestingPicture app should show up in your browser.
 
+***
+___Fall 2021 Warning___
+
+The free tier of Heroku has a memory limit. The new version of Tomee + Linux exceeds that limit. If you get an error page after searching for a picture, that may be why. Try this: use the back button in your browser to get back to the request screen, and try again. If it still doesn't work, sorry - we've tried quite a number of different Tomee installations, but they're either too big or don't work with Servlet 5.0.
+
+***
+
 A few utilities if things go wrong:
 
         heroku apps # which apps you've pushed
@@ -219,7 +226,7 @@ http://aisel.aisnet.org/cgi/viewcontent.cgi?article=3672&context=cais
 
 You must be on campus, or using the campus VPN, to view this article.
 
-3. Answer these two questions. This is not part of getting credit, but you need to know this.
+3. Think about the answers to these two questions - potential test questions.
 
  i) Is a service like AWS an example of IaaS, Paas, or SaaS?
 
