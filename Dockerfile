@@ -9,6 +9,7 @@ RUN rm -rf /usr/local/tomcat/webapps/ROOT
 ADD ROOT.war /usr/local/tomcat/webapps/
 
 # Run
+ENV JAVA_OPTS="-XX:+UseContainerSupport"
 # Comment out the next line for Heroku
 CMD ["catalina.sh", "run"]
 # Uncomment the next two lines for Heroku
