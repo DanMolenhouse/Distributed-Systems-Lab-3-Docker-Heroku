@@ -1,17 +1,21 @@
-FROM tomcat
+# Use Tomcat 10, which supports Servlets 5
+FROM tomcat:10.1.0-M5-jdk16-openjdk-slim-bullseye
 
+# This provides better support for running the JVM in a container
+ENV JAVA_OPTS="-XX:+UseContainerSupport"
+
+# Expose port 8080 when running on localhost
 EXPOSE 8080
 
-# Get rid of default Tomcat web stuff
-RUN rm -rf /usr/local/tomcat/webapps/ROOT
+# Copy in our ROOT.war to the right place in the container
+COPY ROOT.war /usr/local/tomcat/webapps/
 
-# Add in our ROOT.war to the right place
-ADD ROOT.war /usr/local/tomcat/webapps/
-
-# Run
-ENV JAVA_OPTS="-XX:+UseContainerSupport"
-# Comment out the next line for Heroku
+# LOCALHOST:  Run catalina in the container
+# Comment the next line out if running on Heroku
 CMD ["catalina.sh", "run"]
-# Uncomment the next two lines for Heroku
-#ADD tomcat_starter.sh /home/
-#CMD chmod +x /home/tomcat_starter.sh; /home/tomcat_starter.sh
+
+# HEROKU: Run catalina in a container on Heroku
+# Copy tomcat_starter.sh to the container; will executed when deployed
+# Comment the next two lines if running on Localhost
+# COPY tomcat_starter.sh /home/
+# CMD chmod +x /home/tomcat_starter.sh; /home/tomcat_starter.sh
