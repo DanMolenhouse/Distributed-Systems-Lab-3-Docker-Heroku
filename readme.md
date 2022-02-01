@@ -1,6 +1,9 @@
 # 95-702 Distributed Systems for Information Systems Management
 # Lab 3 - Creating Containers and Deploying to the Cloud
 
+***For Lab 3, the 1/4 point checkpoint is due to your specific TA during your lab session.*** The full lab is due before Monday's lecture, 1:25 PM EST 7-Feb-2022. The final checkpoint can be shown to any TA.
+
+After this lab, you will be able to: create a local Docker container to run a servlet; create a Docker container in the cloud for that same servlet; understand basic Cloud terminology; and explain the trade-offs of using containers in the Cloud.
 
 ___Docker___ is a technology for creating containerized applications - that is, your application runs inside a portable container that has all the elements needed to run that application. "Container" means a __process__ (running program) that executes on a machine. "Portable" means the container can be executed on your laptop or moved to another machine - like a cloud server. The container is isolated from other processes on the host machine, so if it crashes, it shouldn't take any other processes down. There are a few issues with isolation, though - for example, the ports that a regular process can access via sockets must be mapped from the container's internal (virtual) ports to the host's actual ports. Systems can be composed of multiple containers that typically use some other technology (like [Kubernetes](https://kubernetes.io/)) to talk to each other (instead of low level port access). See Docker's [documentation](https://docs.docker.com/) for more details. At the end of the lab, there's a reading assignment about Docker.
 
@@ -24,22 +27,32 @@ https://docs.docker.com/install/
 
 and Install Docker CE (Community Edition) according to your system.  Scroll down to find links for Mac and Windows downloads.
 
-2. After installation, make sure you have the Docker daemon running in the background. Open a CMD window (Windows) or terminal (Mac or Linux).
-Use the command
+2. After installation, make sure you have the Docker daemon running in the background. Open a CMD window (Windows) or terminal (Mac or Linux). Use the command
 
         docker ps
 
-to check if it is running.  You should see table headers with empty rows:
+to check if it is running. (All commands are preceded by "docker".) You should see table headers with empty rows:
 
         CONTAINER ID    IMAGE   COMMAND CREATED STATUS  PORTS   NAMES
 
+***Windows Note: if you don't see the above output and you're using Windows:***
+
+From Joseph Perrino:
+If a Windows machine runs into an error where docker ps does not work after installing Docker and/or they get some kind of infinitely looping error that says there’s some issue with Docker Desktop when clicking on its settings, do the following:
+
+Completely uninstall Docker (probably through Settings > Apps > Docker > Uninstall). This may also require removing references to Docker in the Windows Registrar.
+
+Enable HyperV on Windows 10 using PowerShell via this link: https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v
+
+Restart your computer. Run the commands in that link again to verify HyperV is installed. Follow the instructions in this link: https://andrewlock.net/installing-docker-desktop-for-windows/
+
+***End of Windows note***
 
 3. Run the Hello World test image to see if you Docker runs correctly:
 
         docker run hello-world
 
 4. If you see the following message, that means you have installed Docker correctly.
-
 
         Hello from Docker!
 
@@ -80,18 +93,15 @@ The command they suggest trying runs a container with an Ubuntu (linux) command 
 - right click on it to bring up its Properties, where you can see its directory
   path (or choose Reveal in Finder on a Mac).
 - you should see the war file in the Project tab under out -> artifacts -> InterestingPicture_war, named InterestingPicture_war.war
-- copy the war file to your docker directory, but re-name it __ROOT.war__
+- copy the war file to your docker directory, but re-name it **ROOT.war** It is important that you name it ***exactly*** this.
 
 2. Creating a custom Docker container using Dockerfile
-- in the docker directory, copy the file named "Dockerfile" (note: capitalized)
-  from github. Save it to your docker directory. This file contains Docker commands to create a docker container with openjdk12 and Tomcat. It then removes the default web app and copies your war file to the tomcat/webapps directory.
+
+- in the docker directory, copy the file named **Dockerfile** (note: again, name it ***exactly*** like this, capitalized, and **no** extension) from github. Save it to your docker directory. This file contains Docker commands to create a docker container with openjdk12 and Tomcat. It then removes the default web app and copies your war file to the tomcat/webapps directory.
 
 - save this file – but if you’re using Windows, do these two things:
--- make sure the file uses UNIX/Linux line endings. In Notepad++, use Edit > EOL Conversion > UNIX Format.
--- ***make sure the file does NOT have a .txt extension*** if you're
-  using Windows. For example, in Notepad++, choose Save As, type the name in
-  quotes as "Dockerfile", change the File Type from Text Documents (\*.txt) to
-  All Files (\*.\*), and click Save.
+-- ***make sure the file uses UNIX/Linux line endings*** if you're using Windows. In Notepad++, use Edit > EOL Conversion > UNIX Format.
+-- ***make sure the file does NOT have a .txt extension*** if you're using Windows. For example, in Notepad++, choose Save As, type the name in quotes as "Dockerfile", change the File Type from Text Documents (\*.txt) to All Files (\*.\*), and click Save.
 
 ### 1.3. Test your Docker image locally:
 
@@ -109,13 +119,12 @@ The command they suggest trying runs a container with an Ubuntu (linux) command 
 
         docker images
 
-It will display something like this (details will vary):
+It will display something like this (details will vary; "hello world" will likely be listed, too, but it's not shown here):
 
         REPOSITORY            TAG       IMAGE ID        CREATED          SIZE
         interesting_picture   latest    861ece9f7deb    2 minutes ago    108MB
 
-- deploy the image in a container locally. The -p flag (for "publish") maps the actual port on
-  your machine to the Docker container's port. If 8080 is in use on your laptop, change the first number to something else (say, 9000) and use that number in the browser instead.
+- deploy the image in a container locally. The -p flag (for "publish") maps the actual port on your machine to the Docker container's port. If 8080 is in use on your laptop, change the first number to something else (say, 9000) and use that number in the browser instead.
 
         docker run --rm -it -p 8080:8080 interesting_picture
 
@@ -125,17 +134,23 @@ It will display something like this (details will vary):
 
 - you should see your app running. Test it to make sure it works correctly (again, use the port number from the run command if 8080 didn’t work for you). After showing the running app to your TA, kill the program in the CMD or terminal window with ctrl-C.
 
+---
+
+# :checkered_flag: **Checkpoint: This is the Checkpoint for Lab 3.** #
+
+---
+
+
 ## Part 2: Running on the Cloud
 
-Recall that the ___cloud___ is a fancy term for "someone else's servers". Some useful properties of cloud computing include not having to buy hardware, not needing to keep system software (like operating systems) up-to-date, not worrying about exactly where your application is running (although you should think about some possible downsides of that - for example, how is security handled in the cloud?), the ability to scale  - up or down - the number of servers in use based on current demand, and geographic placement to put servers closer to clients.
+Recall that the ***cloud*** is a fancy term for "someone else's servers". Some useful properties of cloud computing include not having to buy hardware, not needing to keep system software (like operating systems) up-to-date, not worrying about exactly where your application is running (although you should think about some possible downsides of that - for example, how is security handled in the cloud? What is the network latency of connecting to the application?), the ability to scale  - up or down - the number of servers in use based on current demand, and geographic placement to put servers closer to clients.
 
 In this lab, you'll use [Heroku](https://www.heroku.com/), which has a free tier for small-scale use. Other commercial cloud providers include [Amazon AWS](https://aws.amazon.com/), [Alibaba Cloud](https://us.alibabacloud.com/en), and [Microsoft Azure](https://azure.microsoft.com/en-us/).
 
 As with Docker, the Heroku commands start with "heroku", sometimes have flags (starting with a single or double -), are case-sensitive, and use generated names for your application. The process is to **create** a Heroku app, **push** your Web servlet to it, **release** it, then **open** it (run it). Make sure you follow the directions carefully - in particular, make sure your .sh file is correct. The push may be slow, so be patient - and this is another reason to be careful: you don't want to repeat the commands.
 
 ### 2.1 Get started with the Heroku cloud provider
-1. Create a Heroku account: Go to https://signup.heroku.com/login and register
-an account. You may choose your role as Student.  
+1. Create a Heroku account: Go to https://signup.heroku.com/login and register an account. You may choose your role as Student.  
 
 2. Follow the instructions and install heroku-cli on your system. Note that you must have Git installed in your system.  See https://devcenter.heroku.com/articles/heroku-cli
 
@@ -147,12 +162,13 @@ an account. You may choose your role as Student.
 
         heroku login
 
+As with Docker, all Heroku commands begin with "heroku".
+
 5. Press enter and it will prompt and navigate you to the browser. Then click log in. Your computer should have access to Heroku services, including a dashboard (although the steps below use the Command-Line Interface).
 
 ### 2.2 Creating and Pushing a Container
 
-1. Create a new directory named "heroku" (just to keep it separate from the local Dockerfile
-above in the docker directory), copy the Dockerfile from part 1 and make the following two changes – see the note above about Windows files: this needs to be a text file without the .txt extension, and it must use UNIX/Linux line endings.
+1. Create a new directory named "heroku" (just to keep it separate from the local Dockerfile above in the docker directory), copy the Dockerfile from part 1 and make the following two changes – see the note above about Windows files: this needs to be a text file without the .txt extension, and it ***must*** use UNIX/Linux line endings.
 
 ***Change # 1:***
 
@@ -172,7 +188,7 @@ Comment out the last line with a hashtag so that it looks like this:
 ___Again, in Windows, follow the directions above about line endings; this is a text file,
 but with the .sh extension, *NOT* .txt or .sh.txt.___
 
-Note: the first line is ***required*** to begin with a hashtag; it's not a comment.
+Note: the first line is ***required*** to begin with a hashtag; it's not a comment; also, do not indent: all lines should be left-justified.
 
         #!/bin/bash
         # Change the configuration of Tomcat so that it listens to
@@ -185,27 +201,31 @@ Note: the first line is ***required*** to begin with a hashtag; it's not a comme
 
 3. Copy the ROOT.war file from the docker directory (or from IntelliJ, again). So there should be three files in this directory: ROOT.war, Dockerfile, tomcat_starter.sh
 
-4. Run this series of heroku commands, one at a time; this may take a few
-minutes, so be patient:
+4. Run this series of heroku commands, one at a time; this may take a few minutes, so be patient:
 
         heroku container:login
+
+***M1 Note: If you're using a MacBook with some variant of the M1 chip, also do this:***
+
+        export DOCKER_DEFAULT_PLATFORM=linux/amd64
+
+<h6>Source: https://medium.com/geekculture/from-apple-silicon-to-heroku-docker-registry-without-swearing-36a2f59b30a3</h6>
+
+***End of M1 Note***
+
+Next:        
+
         heroku create
 
-**->** This will display an system generated app-name; the commands below use "serene-basin-70362",
-but yours will differ: heroku assigns this name to your app; copy it carefully.
+**->** This will display a system generated app name; the commands below use "serene-basin-70362", but yours will differ: heroku assigns this name to your app; copy it carefully.
+
+The next command may take a few moments, be patient.
 
         heroku container:push web -a serene-basin-70362
         heroku container:release web -a serene-basin-70362
         heroku open -a serene-basin-70362
 
 The InterestingPicture app should show up in your browser.
-
-***
-___Fall 2021 Warning___
-
-The free tier of Heroku has a memory limit. The new version of Tomee + Linux exceeds that limit. If you get an error page after searching for a picture, that may be why. Try this: use the back button in your browser to get back to the request screen, and try again. If it still doesn't work, sorry - we've tried quite a number of different Tomee installations, but they're either too big or don't work with Servlet 5.0.
-
-***
 
 A few utilities if things go wrong:
 
@@ -226,8 +246,19 @@ http://aisel.aisnet.org/cgi/viewcontent.cgi?article=3672&context=cais
 
 You must be on campus, or using the campus VPN, to view this article.
 
-3. Think about the answers to these two questions - potential test questions.
+3. Answer these two questions. This is not part of getting credit, but you need to know this.
 
  i) Is a service like AWS an example of IaaS, Paas, or SaaS?
 
  ii) What property makes Docker containers suitable for version control?
+
+
+ ---
+ 
+# :checkered_flag: **LAB CREDIT:  To get full lab credit, show a TA:** #
+
+  ## ***a) InterestingPicture running in local Docker - checkpoint***
+
+  ## ***b) InterestingPicture running on Heroku – the rest***
+
+---  
