@@ -1,264 +1,284 @@
-# 95-702 Distributed Systems for Information Systems Management
-# Lab 3 - Creating Containers and Deploying to the Cloud
+# 95-702 Distributed Systems
+# Project 1
+## Assigned: Friday, January 28, 2022
+## Due: Friday, February 11, 2022, 11:59 PM
 
-***For Lab 3, the 1/4 point checkpoint is due to your specific TA during your lab session.*** The full lab is due before Monday's lecture, 1:25 PM EST 7-Feb-2022. The final checkpoint can be shown to any TA.
+This project has five objectives:
 
-After this lab, you will be able to: create a local Docker container to run a servlet; create a Docker container in the cloud for that same servlet; understand basic Cloud terminology; and explain the trade-offs of using containers in the Cloud.
+**First**, you are introduced to IntelliJ and TomEE. You already have some practice with these. In this assignment, you'll build several web apps to gain more experience.
 
-___Docker___ is a technology for creating containerized applications - that is, your application runs inside a portable container that has all the elements needed to run that application. "Container" means a __process__ (running program) that executes on a machine. "Portable" means the container can be executed on your laptop or moved to another machine - like a cloud server. The container is isolated from other processes on the host machine, so if it crashes, it shouldn't take any other processes down. There are a few issues with isolation, though - for example, the ports that a regular process can access via sockets must be mapped from the container's internal (virtual) ports to the host's actual ports. Systems can be composed of multiple containers that typically use some other technology (like [Kubernetes](https://kubernetes.io/)) to talk to each other (instead of low level port access). See Docker's [documentation](https://docs.docker.com/) for more details. At the end of the lab, there's a reading assignment about Docker.
+**Second**, you build your first set of distributed systems. These are two small web applications using Servlets and Java Server Pages.
 
-A Docker __image__ is an executable file created from a Dockerfile containing all the Docker commands needed to make the image plus a self-contained application. For example, a Web servlet must be packaged as a [war](https://en.wikipedia.org/wiki/WAR_(file_format)#:~:text=In%20software%20engineering%2C%20a%20WAR,that%20together%20constitute%20a%20web) file for use here. When the image is created, it will have an auto-generated name (like "admiring_tereshkova") - you can rename it if you'd like - and the image will have a separate UUID (unique identifier) and image name different than the auto-generated name.
+**Third**, you are introduced to web scraping, API processing, and JSON records.
 
-The Docker commands used in the lab are all preceded by "docker"; they are case-sensitive; and when you create the Dockerfile, it ___must___ be in Linux-style format: no ".txt" on the end, and Unix line endings (see below for details).
+**Fourth**, you are introduced to the MVC pattern if you have not used it before.
 
-This lab will get you to install Docker on your laptop, run Interesting Picture as a Docker image, then push that image to the cloud (we'll be using Heroku). As you work through the commands, be sure to reflect on them by asking yourself these questions: What is each command's purpose? What software is being used by this command? How does this fit into a Distributed Systems context?
+And **fifth**, as in all projects this semester, you should reflect on the functional and non-functional characteristics (e.g. security, scalability, failure handling, interoperability) of your solutions. There will be questions on the final exam concerning these characteristics. You should be able to demonstrate a nuanced comprehension of course content and be able to explain the technical aspects in relation to potential real-world applications. For each project task, software documentation is required. The software that you
+write (Java files and so on) must contain comments that describe what each significant piece of code is intended to accomplish. Points will be deducted if code is not well documented. Read the documentation-related links provided on the course schedule (for class #1) to understand what is expected. Be sure to consult the rubric for details on grading.
 
-### Warning! If you are running Windows Home Edition, upgrade to Educational or Pro before doing this lab!
+# Deliverables
+There are two parts to deliver, all zipped into one file for upload: - one PDF containing relevant screeenshots of all the parts followed by code snippets (which is relative: how much to include is up to you for each part) that produced the result shown in the screenshot. Each section of the PDF must be clearly labeled. - your projects, each zipped, with all of the three tasks zipped together.
 
-## Part 1: Running a Docker Image Locally
+See the end for more detail, but read the project task descriptions first so that you know what the details are talking about.
 
-### 1.1 Install Docker
+# Task 1
+# Use the IntelliJ Project Name:  Project1Task1
 
-This part of the lab installs the Docker daemon on your laptop so that you can run Docker containers there.
+Create an index.jsp page that asks the user to enter a string of text data, and to make a choice of two hash functions using radio buttons. The hash function choices should be MD5 and SHA-256, with MD5 being the default.  When the submit button is pressed a request is sent to a servlet. The servlet must be named ComputeHashes.java. The servlet will compute the requested cryptographic hash value (MD5 or SHA-256) from the text transmitted by the browser. You will need to employ the Java crypto API to compute the hash of the text. The original text will be echoed back to the browser along with the name of the hash, and the hash value. The hash values sent back to the browser should be displayed in two forms: as hexadecimal text and as base 64 notation. We will discuss the use of such hash values later in the course.  To compute the MD5 and SHA-256 hashes, use these standard java packages:
 
-1. Go to
+    import java.security.MessageDigest;
+    import java.security.NoSuchAlgorithmException;
 
-https://docs.docker.com/install/  
+To print the Base64 encoding, use the following method:
 
-and Install Docker CE (Community Edition) according to your system.  Scroll down to find links for Mac and Windows downloads.
+    javax.xml.bind.DatatypeConverter.printBase64Binary
 
-2. After installation, make sure you have the Docker daemon running in the background. Open a CMD window (Windows) or terminal (Mac or Linux). Use the command
+To print the hexadecimal encoding, use the following method:
 
-        docker ps
+    javax.xml.bind.DatatypeConverter.printHexBinary
 
-to check if it is running. (All commands are preceded by "docker".) You should see table headers with empty rows:
+Be sure to provide a simple and user friendly interface.  If you are unfamiliar with HTML forms, a simple explanation can be found at:
 
-        CONTAINER ID    IMAGE   COMMAND CREATED STATUS  PORTS   NAMES
+    http://www.w3schools.com/html/html_forms.asp .
 
-***Windows Note: if you don't see the above output and you're using Windows:***
+Be sure to create screen shots of your working application and submit them as described in the Submission section at the end of this document.
 
-From Joseph Perrino:
-If a Windows machine runs into an error where docker ps does not work after installing Docker and/or they get some kind of infinitely looping error that says there’s some issue with Docker Desktop when clicking on its settings, do the following:
+# Task 2
+## Use IntelliJ Project Name: Project1Task2
 
-Completely uninstall Docker (probably through Settings > Apps > Docker > Uninstall). This may also require removing references to Docker in the Windows Registrar.
+Task 2 is meant to give you practice with several things: servlet programming, web scraping, API's, JSON, and MVC. It also gives dogs more web exposure to compete with smelly cats.
 
-Enable HyperV on Windows 10 using PowerShell via this link: https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v
+Your program will present a welcome screen containing a title, your name, and a drop-down menu of a limited number of dog breeds, as in Figure 1 and Figure 2. The Submit button is used to record the user's choice. Note that you will need to learn about HTML drop-down menus on your own.
 
-Restart your computer. Run the commands in that link again to verify HyperV is installed. Follow the instructions in this link: https://andrewlock.net/installing-docker-desktop-for-windows/
-
-***End of Windows note***
-
-3. Run the Hello World test image to see if you Docker runs correctly:
-
-        docker run hello-world
-
-4. If you see the following message, that means you have installed Docker correctly.
-
-        Hello from Docker!
-
-        This message shows that your installation appears to be working correctly.
-
-        To generate this message, Docker took the following steps:
-        1. The Docker client contacted the Docker daemon.
-        2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
-        (amd64)
-        3. The Docker daemon created a new container from that image which runs the
-        executable that produces the output you are currently reading.
-        4. The Docker daemon streamed that output to the Docker client, which sent it
-        to your terminal.
-
-        To try something more ambitious, you can run an Ubuntu container with:
-         $ docker run -it ubuntu bash
-
-        Share images, automate workflows, and more with a free Docker ID:
-         https://hub.docker.com/
-
-        For more examples and ideas, visit:
-         https://docs.docker.com/get-started/
-
-The command they suggest trying runs a container with an Ubuntu (linux) command shell; there's no need to run it.
-
-### 1.2 Creating a Custom Docker Container
-
-1. Creating a war file (see https://www.jetbrains.com/help/idea/creating-and-running-your-first-java-ee-application.html)
-
-- create a directory called "docker"; remember where it is.
-- in IntelliJ, go to your InterestingPicture project and select File -> Project Structure.
-	- click on Artifacts
-	- click +, select Web Application:Archive, and select "For InterestingPicture: war exploded"
-	- if the message "Library 'lib' required .. the artifact" and a Fix button appear, DO NOT CLICK on Fix.
-	- click Create Manifest and agree to the suggested location
-	- click OK in the Project Structure
-	- choose Build -> Build Artifacts. Point to InterestingPicture:war and choose Build
-- right click on it to bring up its Properties, where you can see its directory
-  path (or choose Reveal in Finder on a Mac).
-- you should see the war file in the Project tab under out -> artifacts -> InterestingPicture_war, named InterestingPicture_war.war
-- copy the war file to your docker directory, but re-name it **ROOT.war** It is important that you name it ***exactly*** this.
-
-2. Creating a custom Docker container using Dockerfile
-
-- in the docker directory, copy the file named **Dockerfile** (note: again, name it ***exactly*** like this, capitalized, and **no** extension) from github. Save it to your docker directory. This file contains Docker commands to create a docker container with openjdk12 and Tomcat. It then removes the default web app and copies your war file to the tomcat/webapps directory.
-
-- save this file – but if you’re using Windows, do these two things:
--- ***make sure the file uses UNIX/Linux line endings*** if you're using Windows. In Notepad++, use Edit > EOL Conversion > UNIX Format.
--- ***make sure the file does NOT have a .txt extension*** if you're using Windows. For example, in Notepad++, choose Save As, type the name in quotes as "Dockerfile", change the File Type from Text Documents (\*.txt) to All Files (\*.\*), and click Save.
-
-### 1.3. Test your Docker image locally:
-
--In the **docker** folder, you should have the following structure:
-
-    docker/
-    ├── Dockerfile
-    └── ROOT.war
-
-- from the docker directory in a terminal or CMD window, build the docker image with the command (note the space and period at the end); this will take a few seconds, and you'll see docker output scrolling by.
-
-        docker build -t interesting_picture .
-
-- you can see all of your images by running:
-
-        docker images
-
-It will display something like this (details will vary; "hello world" will likely be listed, too, but it's not shown here):
-
-        REPOSITORY            TAG       IMAGE ID        CREATED          SIZE
-        interesting_picture   latest    861ece9f7deb    2 minutes ago    108MB
-
-- deploy the image in a container locally. The -p flag (for "publish") maps the actual port on your machine to the Docker container's port. If 8080 is in use on your laptop, change the first number to something else (say, 9000) and use that number in the browser instead.
-
-        docker run --rm -it -p 8080:8080 interesting_picture
-
-- open a browser window with the address:
-
-        http://localhost:8080/
-
-- you should see your app running. Test it to make sure it works correctly (again, use the port number from the run command if 8080 didn’t work for you). After showing the running app to your TA, kill the program in the CMD or terminal window with ctrl-C.
+## Input
+![Figure 1](figure1.png)
+***Figure 1***
 
 ---
 
-# :checkered_flag: **Checkpoint: This is the Checkpoint for Lab 3.** #
+![Figure 2](figure2.png)
+***Figure 2***
 
----
+## Output
+Figure 3 shows the output screen. Several facts have been scraped from the web site:
 
+> https://dogtime.com/dog-breeds/profiles
 
-## Part 2: Running on the Cloud
+![Figure 3](figure3.png)
+***Figure 3: Good boy! Sit!***
 
-Recall that the ***cloud*** is a fancy term for "someone else's servers". Some useful properties of cloud computing include not having to buy hardware, not needing to keep system software (like operating systems) up-to-date, not worrying about exactly where your application is running (although you should think about some possible downsides of that - for example, how is security handled in the cloud? What is the network latency of connecting to the application?), the ability to scale  - up or down - the number of servers in use based on current demand, and geographic placement to put servers closer to clients.
+These facts include the star ratings for friendliness and intelligence, the height and weight ranges of the breed, and the expected lifespan. All of these must be scraped. Also note the credit string for the web site.
 
-In this lab, you'll use [Heroku](https://www.heroku.com/), which has a free tier for small-scale use. Other commercial cloud providers include [Amazon AWS](https://aws.amazon.com/), [Alibaba Cloud](https://us.alibabacloud.com/en), and [Microsoft Azure](https://azure.microsoft.com/en-us/).
+Next, a picture of a representative of the breed is shown. This is retrieved from a different site:
 
-As with Docker, the Heroku commands start with "heroku", sometimes have flags (starting with a single or double -), are case-sensitive, and use generated names for your application. The process is to **create** a Heroku app, **push** your Web servlet to it, **release** it, then **open** it (run it). Make sure you follow the directions carefully - in particular, make sure your .sh file is correct. The push may be slow, so be patient - and this is another reason to be careful: you don't want to repeat the commands.
+> https://dog.ceo/dog-api/
 
-### 2.1 Get started with the Heroku cloud provider
-1. Create a Heroku account: Go to https://signup.heroku.com/login and register an account. You may choose your role as Student.  
+using that site's API.  Again, note the credit string.
 
-2. Follow the instructions and install heroku-cli on your system. Note that you must have Git installed in your system.  See https://devcenter.heroku.com/articles/heroku-cli
+You'll have to figure out how to construct a proper API request. When you query this site, a ***JSON record*** is returned, containing a number of URL's for pictures of dogs of the chosen breed. Choose *one* of these URL's ***at random***. To do this, you'll need to understand JSON records and the Java Random class. See below for some information on including JSON into your project, which is required. (*Note:* we could have scraped a picture URL from the first web site, but the point here is to use an API.)
 
-3. This website also contains the link to configure Git if you don't have it.
-- Git installation
-- First-time Git setup
+When the user presses the "Continue" button, return to the original screen.
 
-4. After installation, open your terminal or CMD window and type
+## Notes and hints
 
-        heroku login
+## Screen Scraping
+Screen scraping is programmatically processing the HTML that typically is displayed by a browser and can be a useful tool when your data source does not have an API that provides structured data. Instead, you can search or parse the HTML to find and extract the data that you need. For more information, see
 
-As with Docker, all Heroku commands begin with "heroku".
+> https://en.wikipedia.org/wiki/Web_scraping
 
-5. Press enter and it will prompt and navigate you to the browser. Then click log in. Your computer should have access to Heroku services, including a dashboard (although the steps below use the Command-Line Interface).
+Your application should work similarly to InterestingPicture, but instead of searching Flickr, it will use the sites mentioned above.
 
-### 2.2 Creating and Pushing a Container
+- You are allowed to and encouraged to build your solution based on the InterestingPicture code you have been given in class. You MUST refactor it, however, to have project, variable, and class names that make sense for your application. For example, <b>you will lose points</b> if your class is still named InterestingPictureServlet.
 
-1. Create a new directory named "heroku" (just to keep it separate from the local Dockerfile above in the docker directory), copy the Dockerfile from part 1 and make the following two changes – see the note above about Windows files: this needs to be a text file without the .txt extension, and it ***must*** use UNIX/Linux line endings.
+- You do not need to, but you are welcome to, use jsoup (https://jsoup.org/) which is a Java HTML Parser, to do the flag scraping.  The downsides of using jsoup are you will first need to understand the Document Object Model (DOM) and CSS Selectors. These are both useful to know.  o The upside of using jsoup is that it makes it much easier to find and select content from HTML (i.e. screen scrape). Refer to the JSON Maven notes below for adding jsoup.
 
-***Change # 1:***
+## HTML
 
-Before the last line (which says CMD ["catalina.sh", "run"] ), un-comment the following lines (i.e. remove the hashtags):
+Refer to http://www.w3schools.com for good help on the basic HTML you need for this task. This has examples of drop-down boxes.
 
-        ADD tomcat_starter.sh /home/
-        CMD chmod +x /home/tomcat_starter.sh; /home/tomcat_starter.sh
+## JSON
 
-***Change # 2:***
+JSON records are text records containing tag-value pairs, where the tag is the field name - think of it as a dictionary or map with nesting. It is much shorter than XML. In order to find what you need, use the JSON library GSON. To use GSON, download the gson v.2.8.6 jar file to a place you'll remember. To add it to your project, go to File->Project Structure->Modules, choose the Dependencies tab, click the + icon at the bottom choose Jars or Directories, navigate to where you put the jar file, click that, then Apply and OK. It should show up in your pom.xml file as the last entry in <dependiences> as:
 
-Comment out the last line with a hashtag so that it looks like this:
+  ```
+  <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.6</version>
+  </dependency>
+  ```
 
-        #CMD ["catalina.sh", "run"]
+Finally, reload the Maven dependencies to have this new dependency take effect - an icon will probably appear in the pom.xml window, but if you don't see it, got to the Project View window, find the pom.xml entry (it should be near the bottom of the tree), right click it, choose Maven -> Reload Project.  
 
-2. Create this bash shell script, a text file named “tomcat_starter.sh”.
+## SSLHandshakeException
+Some sites require you to make https, not http requests. When you do so from your Java program, you will hit an SSLHandshakeException. We will be covering SSL and related topics in a few weeks. In the meantime, you will have to deal with this exception.
 
-___Again, in Windows, follow the directions above about line endings; this is a text file,
-but with the .sh extension, *NOT* .txt or .sh.txt.___
+If you use jsoup, you should use validateTLSCertificates(false). (Refer to the jsoup API to understand this when you need it.)
 
-Note: the first line is ***required*** to begin with a hashtag; it's not a comment; also, do not indent: all lines should be left-justified.
+If you do not use jsoup, here is a code to replace the fetch method in InterestingPictureModel to ignore the exception. The parameter "certType" should be set to the string "TLSV1.3".
 
-        #!/bin/bash
-        # Change the configuration of Tomcat so that it listens to
-        # the port assigned by Heroku
-        sed -i s/8080/$PORT/ /usr/local/tomcat/conf/server.xml
-        # delete the default ROOT directory so ROOT.war is used
-        rm -rf /usr/local/tomcat/webapps/ROOT
-        # start the server
-        catalina.sh run
+```
+private String fetch(String searchURL, String certType) {
+    try {
+        // Create trust manager, which lets you ignore SSLHandshakeExceptions
+        createTrustManager(certType);
+    } catch (KeyManagementException ex) {
+        System.out.println("Shouldn't come here: ");
+        ex.printStackTrace();
+    } catch (NoSuchAlgorithmException ex) {
+        System.out.println("Shouldn't come here: ");
+        ex.printStackTrace();
+    }
 
-3. Copy the ROOT.war file from the docker directory (or from IntelliJ, again). So there should be three files in this directory: ROOT.war, Dockerfile, tomcat_starter.sh
+    String response = "";
+    try {
+        URL url = new URL(searchURL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-4. Run this series of heroku commands, one at a time; this may take a few minutes, so be patient:
+        // Read all the text returned by the server
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+        String str;
+        // Read each line of "in" until done, adding each to "response"
+        while ((str = in.readLine()) != null) {
+            // str is one line of text readLine() strips newline characters
+            response += str;
+        }
+        in.close();
+    } catch (IOException e) {
+        System.err.println("Something wrong with URL");
+        return null;
+    }
+    return response;
+}
 
-        heroku container:login
+private void createTrustManager(String certType) throws KeyManagementException, NoSuchAlgorithmException{
+    /**
+     * Annoying SSLHandShakeException. After trying several methods, finally this
+     * seemed to work.
+     * Taken from: http://www.nakov.com/blog/2009/07/16/disable-certificate-validation-in-java-ssl-connections/
+     */
+    // Create a trust manager that does not validate certificate chains
+    TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+        }
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+        }
+    }
+    };
 
-***M1 Note: If you're using a MacBook with some variant of the M1 chip, also do this:***
+    // Install the all-trusting trust manager
+    SSLContext sc = SSLContext.getInstance(certType);
+    sc.init(null, trustAllCerts, new java.security.SecureRandom());
+    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
-        export DOCKER_DEFAULT_PLATFORM=linux/amd64
+    // Create all-trusting host name verifier
+    HostnameVerifier allHostsValid = new HostnameVerifier() {
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+    };
 
-<h6>Source: https://medium.com/geekculture/from-apple-silicon-to-heroku-docker-registry-without-swearing-36a2f59b30a3</h6>
+    // Install the all-trusting host verifier
+    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+}
 
-***End of M1 Note***
+```
 
-Next:        
+Track Piazza for additional hints and answers to questions.
 
-        heroku create
+## Deliverables
 
-**->** This will display a system generated app name; the commands below use "serene-basin-70362", but yours will differ: heroku assigns this name to your app; copy it carefully.
+In addition to your project code, produce screen shots showing two different dog breeds.
 
-The next command may take a few moments, be patient.
+# Task 3 – Use the IntelliJ Project Name: Project1Task3
 
-        heroku container:push web -a serene-basin-70362
-        heroku container:release web -a serene-basin-70362
-        heroku open -a serene-basin-70362
+Implement a web application that implements a simple desktop and mobile “clicker” for class.  Your app should allow users to submit answers to questions posed in class, and should provide a separate URL end point for getting the results of the submitted responses.  The welcome page for your app should be similar to Figure 4.  You can make it more stylish if you like, but it is not required.
 
-The InterestingPicture app should show up in your browser.
+![Figure 4](figure4.png)
+***Figure 4***
 
-A few utilities if things go wrong:
+When the user makes a choice and hits “submit”, their answer should be stored in your MVC model.  The response should be similar to the picture on the left. Notice that it is **required** to provide feedback to the user regarding the choice that they made (i.e. “D” in this example).
 
-        heroku apps # which apps you've pushed
-        heroku apps:destroy serene-basin-70362 # you're only allowed 5 on the free tier
-        heroku logs --tail -a serene-basin-70362 # if you get a heroku error message in the browser
+The user should also have the ability to submit another answer as shown in the screenshot.
 
+![Figure 5](figure5.png)
+***Figure 5***
 
-## Part 3: Cloud and Containers Concepts
+You can test the application by repeatedly submitting answers and allowing your model to tally the results.  Your web app should also have a URL path “/getResults” (shown in Figure 6) for listing the results of user voting.
 
-1. Read this article:
+![Figure 6](figure6.png)
+***Figure 6***
 
-https://www.infoworld.com/article/3077875/linux/containers-101-docker-fundamentals.html
+## Requirements for the /getResults path:
 
-2. Read "A Descriptive Literature Review and Classification of Cloud Computing Research", journal pages 36 through 39 (PDF pages 3 through 6).
+1. List each answer that has been given, and the number of times a user has submitted that answer.
+2. You do not have to list options that have been chosen zero times.
+3. The results should be displayed sorted in alphabetical order.
+4. /getResults should also clear the stored results so that a new question can be posed.
+5. If there are no results available, then report this as shown in Figure 7.
 
-http://aisel.aisnet.org/cgi/viewcontent.cgi?article=3672&context=cais
+![Figure 7](figure7.png)
+***Figure 7***
 
-You must be on campus, or using the campus VPN, to view this article.
+Note that requirement 4 does not adhere to the HTTP standard for a GET request. You should understand why this is bad behavior according to the standard, and how you could fix it (It might be on the exam).
 
-3. Answer these two questions. This is not part of getting credit, but you need to know this.
+The web app should work with a mobile browser.  For this project you can use a simple check like the one that was used in InterestingPicture and then use an appropriate mobile doctype. An easy way to check your web app for mobile is to use the Google Chrome DevTools Using the Google Chrome browser.
 
- i) Is a service like AWS an example of IaaS, Paas, or SaaS?
+- Browse to your web application in Chrome
+- Access the Chrome DevTools
+(https://developers.google.com/web/tools/chrome-devtools/?hl=en#access-devtools).  
+- Toggle device mode to mobile and choose an Android or iPhone device
+(https://developers.google.com/web/tools/chrome-devtools/iterate/device-mode/?hl=en)
+- Reload the page.
+- In addition to testing, you use this to produce a screen shot showing your web app working for mobile.  If your page looks like the one on the right, even after reloading, then the doctype is not being set correctly.   
 
- ii) What property makes Docker containers suitable for version control?
+Figure 9 is what the web app should look like for mobile if the doctype is set correctly.
 
+![Figure 9](figure9.png)
+***Figure 9***
 
- ---
- 
-# :checkered_flag: **LAB CREDIT:  To get full lab credit, show a TA:** #
+## Overall web app requirements:
+- You must use MVC to separate concerns.
+- Implement only one HttpServlet
 
-  ## ***a) InterestingPicture running in local Docker - checkpoint***
+## Hints:
+- You can have multiple URL patterns in a WebServlet annotation.  For example, you can indicate that a servlet can be called by two paths such as: urlPatterns = {"/submit", "/getResults"}
 
-  ## ***b) InterestingPicture running on Heroku – the rest***
+ - In order to determine within the servlet which path was actually requested, you can use request.getServletPath();
 
----  
+Produce screen shots of your application:
+- With the answer options on desktop
+- With the getResults on desktop
+- With the answer options on mobile
+- With the getResults on mobile
+
+## Questions:
+If you have questions, you can post them to the class Piazza and tag them as “Project1”.
+
+# Summary & Submission:
+Be sure to review the Rubric linked on the course schedule for the first day.
+
+Submit ***one*** PDF containing the following; each part should being with the headers shown (that is, "Task 1") and subheaders for the subparts. "Code snippet" means a copy of the relevant code, **not** all of the .java or .jsp file.
+
+### Task 1:
+1. **Screen shots** of input, MD5 and SHA-256 output, both in hex and base 64
+2. **Code snippets** of computation of each hash
+
+### Task 2:
+1. **Screen shots** of input page, drop-down menu, output page for Collie and Whippet.
+2. **Code snippets** for:
+- scraping of intelligence
+- scraping of weight
+- api call for the picture, including choosing one at random.
+
+### Task 3:
+1. **Screen shots** of the input page, output page (one vote), results page
+2. **Code snippets** from the Java code that produces the output page and the results page.
+
+**New directions for the code:**
+Create three zip files, each one of which is the zip of your WHOLE project for task 1, 2 and 3. For each project, zip the whole project, you need to use "File->Export Project->To Zip" in IDEA.
+
+Zip the one PDF and the three project zip files into one big zip file for submission.
