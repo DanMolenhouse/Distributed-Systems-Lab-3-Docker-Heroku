@@ -241,13 +241,7 @@ catalina.sh run
 
 ```
 
-3. Copy the ROOT.war file from the docker directory (or from IntelliJ, again). So there should be three files in this directory: ROOT.war, Dockerfile, tomcat_starter.sh: the **heroku** folder should have the following structure:
-
-
-    heroku/
-    ├── Dockerfile
-    ├── ROOT.war
-    └─  tomcat_starter.sh
+3. Copy the ROOT.war file from the docker directory (or from IntelliJ, again). So there should be three files in this directory: ROOT.war, Dockerfile, tomcat_starter.sh
 
 
 4. Run this series of heroku commands on the command line **from the heroku directory**, one at a time; this may take a few minutes, so be patient:
