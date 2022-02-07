@@ -86,11 +86,14 @@ First, create a directory (folder) called "docker"; remember where it is.
 
 Follow these if-else if-else directions:
 
-**If you already see the file InterestingPicture-1.0-SNAPSHOT.war*** somewhere in your project panel, you don't have to do the following. It would be in the target directory (or possibly in the target/out directory).
+**If you already see the file InterestingPicture-1.0-SNAPSHOT.war ...**
 
-- in IntelliJ, click Build->Build Artifacts.
+- somewhere in your project panel, you don't have to do the Build part below. The war file would be in the target directory (or possibly in the target/out directory).
 
-**else if one of the choices is "InterestingPicture:war",** click the arrow to get the sub-menu and click Build. As above, this should create the file InterestingPicture-1.0-SNAPSHOT.war, which will be in the target (or possibly target/out) directory.
+
+**else in IntelliJ, click Build->Build Artifacts. if one of the choices is "InterestingPicture:war"**
+
+- click the arrow to get the sub-menu and click Build. As above, this should create the file InterestingPicture-1.0-SNAPSHOT.war, which will be in the target (or possibly target/out) directory.
 
 **else** do the following:
 
@@ -107,7 +110,7 @@ Follow these if-else if-else directions:
 You need to copy the war file, so figure out what directory it's in:  
 - right click on it to bring up its Properties, where you can see its directory
   path (or choose Reveal in Finder on a Mac).
-- copy the war file to your docker directory, but re-name it **ROOT.war** It is important that you name it ***exactly*** this.
+- copy the war file to your docker directory, but re-name it **ROOT.war**. It is important that you name it ***exactly*** this.
 
 2. Creating a custom Docker container using Dockerfile
 
@@ -116,7 +119,9 @@ You need to copy the war file, so figure out what directory it's in:
 - save this file.
 
 **If you’re using Windows**, do these two things:
+
 -- ***make sure the file uses UNIX/Linux line endings*** if you're using Windows. In Notepad++, use Edit > EOL Conversion > UNIX Format.
+
 -- ***make sure the file does NOT have a .txt extension*** if you're using Windows. For example, in Notepad++, choose Save As, type the name in quotes as "Dockerfile", change the File Type from Text Documents (\*.txt) to All Files (\*.\*), and click Save.
 
 If you don't do this, Docker will not work. You'll also need to do this for the .sh file in Part 2.
@@ -208,20 +213,44 @@ Comment out the last line with a hashtag so that it looks like this:
 ___Again, in Windows, follow the directions above about line endings; this is a text file,
 but with the .sh extension, *NOT* .txt or .sh.txt.___
 
-Note: the first line is ***required*** to begin with a hashtag; it's not a comment; also, do not indent: all lines should be left-justified.
+Note: the first line is ***required*** to begin with a hashtag; it's not a comment, it identifies this file as a bash script. Also, **do not indent**: all lines should be left-justified.
 
-        #!/bin/bash
-        # Change the configuration of Tomcat so that it listens to
-        # the port assigned by Heroku
-        sed -i s/8080/$PORT/ /usr/local/tomcat/conf/server.xml
-        # delete the default ROOT directory so ROOT.war is used
-        rm -rf /usr/local/tomcat/webapps/ROOT
-        # start the server
-        catalina.sh run
+```
+#!/bin/bash
+# The above line, #!/bin/bash, identifies this file
+# as a bash shell script.
 
-3. Copy the ROOT.war file from the docker directory (or from IntelliJ, again). So there should be three files in this directory: ROOT.war, Dockerfile, tomcat_starter.sh
+# It should be made executable using
+#    CMD chmod +x /home/tomcat_starter.sh
+# in the Dockerfile.
 
-4. Run this series of heroku commands, one at a time; this may take a few minutes, so be patient:
+# sed is the Linux stream editor used to edit files in-place
+#    automatically instead of manually
+# The s/a/b/ option substitutes the first thing (8080) for
+#    the second thing ($PORT) in the server.xml file
+
+# Change the configuration of Tomcat so that it listens to
+# the port assigned by Heroku
+sed -i s/8080/$PORT/ /usr/local/tomcat/conf/server.xml
+
+# delete the default ROOT directory so ROOT.war is used
+rm -rf /usr/local/tomcat/webapps/ROOT
+
+# start the server using the built-in catalina.sh bash script
+catalina.sh run
+
+```
+
+3. Copy the ROOT.war file from the docker directory (or from IntelliJ, again). So there should be three files in this directory: ROOT.war, Dockerfile, tomcat_starter.sh: the **heroku** folder should have the following structure:
+
+
+    heroku/
+    ├── Dockerfile
+    ├── ROOT.war
+    └─  tomcat_starter.sh
+
+
+4. Run this series of heroku commands on the command line **from the heroku directory**, one at a time; this may take a few minutes, so be patient:
 
         heroku container:login
 
@@ -229,7 +258,11 @@ Note: the first line is ***required*** to begin with a hashtag; it's not a comme
 
         export DOCKER_DEFAULT_PLATFORM=linux/amd64
 
-<h6>Source: https://medium.com/geekculture/from-apple-silicon-to-heroku-docker-registry-without-swearing-36a2f59b30a3</h6>
+<h6>Source:
+
+https://medium.com/geekculture/from-apple-silicon-to-heroku-docker-registry-without-swearing-36a2f59b30a3
+
+</h6>
 
 ***End of M1 Note***
 
@@ -237,7 +270,7 @@ Next:
 
         heroku create
 
-**->** This will display a system generated app name; the commands below use "serene-basin-70362", but yours will differ: heroku assigns this name to your app; copy it carefully.
+**->** This will display a system generated app name; the commands below use "serene-basin-70362", but **yours will be different**: heroku assigns this name to your app; copy it carefully.
 
 The next command may take a few moments, be patient.
 
