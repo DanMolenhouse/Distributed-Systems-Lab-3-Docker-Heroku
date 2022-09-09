@@ -1,7 +1,7 @@
 # 95-702 Distributed Systems for Information Systems Management
 # Lab 3 - Creating Containers and Deploying to the Cloud
 
-***For Lab 3, the 1/4 point checkpoint is due to your specific TA during your lab session.*** The full lab is due before Monday's lecture, 1:25 PM EST 7-Feb-2022. The final checkpoint can be shown to any TA.
+***For Lab 3, the 1/4 point checkpoint is due to your specific TA during your lab session.*** The full lab is due before Monday's lecture, 1:25 PM EST 19-Sept-2022. The final checkpoint can be shown to any TA.
 
 After this lab, you will be able to: create a local Docker container to run a servlet; create a Docker container in the cloud for that same servlet; understand basic Cloud terminology; and explain the trade-offs of using containers in the Cloud.
 
@@ -84,7 +84,7 @@ The command they suggest trying runs a container with an Ubuntu (linux) command 
 
 First, create a directory (folder) called "docker"; remember where it is.
 
-Follow these if-else if-else directions:
+Follow these "if-else, if-else" directions:
 
 **If you already see the file InterestingPicture-1.0-SNAPSHOT.war ...**
 
@@ -110,7 +110,7 @@ Follow these if-else if-else directions:
 You need to copy the war file, so figure out what directory it's in:  
 - right click on it to bring up its Properties, where you can see its directory
   path (or choose Reveal in Finder on a Mac).
-- copy the war file to your docker directory, but re-name it **ROOT.war**. It is important that you name it ***exactly*** this.
+- copy the war file to your docker directory, but re-name it **ROOT.war**. It is important that you name it ***exactly*** this: it's case-sensitve.
 
 2. Creating a custom Docker container using Dockerfile
 
@@ -181,7 +181,9 @@ As with Docker, the Heroku commands start with "heroku", sometimes have flags (s
 - Git installation
 - First-time Git setup
 
-4. After installation, open your terminal or CMD window and type
+4. There are a series of steps, described below, using heroku; you may have to repeat some of them. For convenience, they are in the file "herokuCommands" in this repository. Note that "heroku create" will generate a unique name for your app that is required in the later commands, so replace <your-app-here> with that name.
+
+After installation, open your terminal or CMD window and type
 
         heroku login
 
