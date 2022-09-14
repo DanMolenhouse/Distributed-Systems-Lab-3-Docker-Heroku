@@ -1,5 +1,5 @@
 heroku login
-heroku contain:login
+heroku container:login
 heroku create
 heroku container:push web -a <your-app-here>
 heroku container:release web -a <your-app-here>
