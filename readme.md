@@ -201,7 +201,7 @@ Copy the Dockerfile from part 1 and make the following two changes – see the n
 
 Before the last line (which says CMD ["catalina.sh", "run"] ), un-comment the following lines (i.e. remove the hashtags):
 
-        ADD tomcat_starter.sh /home/
+        COPY tomcat_starter.sh /home/
         CMD chmod +x /home/tomcat_starter.sh; /home/tomcat_starter.sh
 
 ***Change # 2:***
