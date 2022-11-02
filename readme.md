@@ -1,5 +1,11 @@
-# 95-702 Distributed Systems for Information Systems Management
+# Distributed Systems for Information Systems Management
 # Lab 3 - Creating Containers and Deploying to the Cloud
+
+**Some quick commentary from @DanMolenhouse:**
+> I forked this repository from the official CMU Distributed Systems Github to showcase some of the experience I have with creating Docker containers, and deploying images to the cloud (in this case, to Heroku) using Docker.
+> This process was utilized to deploy the logic for my Android app in [Project 4](https://github.com/DanMolenhouse/Distributed-Systems-Project4-AndroidApplication) as a WAR file to Heroku.
+
+
 
 ***For Lab 3, the 1/4 point checkpoint is due to your specific TA during your lab session.*** The full lab is due before Monday's lecture, 1:25 PM EST 19-Sept-2022. The final checkpoint can be shown to any TA.
 
