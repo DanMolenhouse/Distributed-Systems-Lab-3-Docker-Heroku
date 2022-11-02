@@ -6,7 +6,7 @@
 > This process was utilized to deploy the logic for my Android app in [Project 4](https://github.com/DanMolenhouse/Distributed-Systems-Project4-AndroidApplication) as a WAR file to Heroku.
 
 
-
+### Beginning of lab instructions
 ***For Lab 3, the 1/4 point checkpoint is due to your specific TA during your lab session.*** The full lab is due before Monday's lecture, 1:25 PM EST 19-Sept-2022. The final checkpoint can be shown to any TA.
 
 After this lab, you will be able to: create a local Docker container to run a servlet; create a Docker container in the cloud for that same servlet; understand basic Cloud terminology; and explain the trade-offs of using containers in the Cloud.
